@@ -12,6 +12,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    name: Deploy ${{ matrix.host.hostname }}
     strategy:
       matrix:
         host:
