@@ -13,6 +13,7 @@ scrape_configs:
 
   - job_name: cadvisor
     scrape_interval: 5s
+    scheme: https
     static_configs:
       - targets:
           - cadvisor.tau.alexrudy.tech
@@ -22,6 +23,7 @@ scrape_configs:
   - job_name: "node-exporter"
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
+    scheme: https
     static_configs:
       - targets:
           - node-exporter.tau.alexrudy.tech

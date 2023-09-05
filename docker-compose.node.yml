@@ -11,7 +11,7 @@ services:
     x-homelab:
       hostnames: ["node-exporter.${HOSTNAME}"]
       expose: false
-      ssl: false
+      ssl: true
       robots: deny
       ports: 9100
     volumes:
@@ -42,7 +42,7 @@ services:
     x-homelab:
       hostnames: ["cadvisor.${HOSTNAME}"]
       expose: false
-      ssl: false
+      ssl: true
       robots: deny
       ports: 8080
     expose:
