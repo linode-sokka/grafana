@@ -15,6 +15,7 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets:
+          - cadvisor.tau.alexrudy.tech
           - cadvisor.staging.alexrudy.tech
           - cadvisor.production.alexrudy.tech
 
@@ -23,5 +24,6 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets:
+          - node-exporter.tau.alexrudy.tech
           - node-exporter.staging.alexrudy.tech
           - node-exporter.production.alexrudy.tech
