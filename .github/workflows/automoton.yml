@@ -1,0 +1,40 @@
+name: Deploy to Automoton
+on:
+  push:
+    branches:
+      - main
+
+env:
+  TAG: ${{ github.ref_name }}
+
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        host:
+          - { hostname: 'tau.alexrudy.tech', api: 'https://api.tau.alexrudy.tech', compose: '-f docker-compose.grafana.yml -f docker-compose.node.yml' }
+          - { hostname: 'staging.alexrudy.tech', api: 'https://api.alexrudy.tech', compose: '-f docker-compose.node.yml' }
+          - { hostname: 'production.alexrudy.tech', api: 'https://api.alexrudy.net', compose: '-f docker-compose.node.yml' }
+    env:
+      DOCKER_BUILDKIT: '1'
+      COMPOSE_DOCKER_CLI_BUILD: '1'
+    steps:
+      - uses: actions/checkout@v1
+      - name: Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:github
+      - name: Deploy To Tau
+        uses: linode-sokka/deploy-action@v3
+        with:
+          url: ${{ matrix.host.api }}
+          token: ${{ secrets.DEPLOY_TOKEN }}
+          project: grafana
+          compose: ${{ matrix.host.compose }}
+        env:
+          HOSTNAME: ${{ matrix.host.hostname }}

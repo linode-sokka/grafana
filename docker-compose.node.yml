@@ -1,0 +1,50 @@
+services:
+  node-exporter:
+    restart: unless-stopped
+    image: prom/node-exporter:v1.0.1
+    x-net-alexrudy:
+      hostnames: ["node-exporter.${HOSTNAME}"]
+      expose: false
+      ssl: false
+      robots: deny
+      ports: 9100
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    ports:
+      - 9100
+    networks:
+      - reverse-proxy
+
+  cadvisor:
+    restart: always
+    image: gcr.io/cadvisor/cadvisor:v0.36.0
+    container_name: cadvisor
+    x-net-alexrudy:
+      hostnames: ["cadvisor.${HOSTNAME}"]
+      expose: false
+      ssl: false
+      robots: deny
+      ports: 8080
+    expose:
+      - 8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - reverse-proxy
+
+networks:
+  reverse-proxy:
+    external:
+      name: reverse-proxy
+

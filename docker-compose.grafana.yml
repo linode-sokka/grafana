@@ -1,0 +1,67 @@
+services:
+  prometheus:
+    restart: unless-stopped
+    image: prom/prometheus:latest
+    x-net-alexrudy:
+      hostnames: ["prometheus.alexrudy.tech"]
+      expose: false
+      ssl: true
+      port: 3000
+      robots: deny
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=15d'
+      - '--storage.tsdb.retention.size=10GB'
+      - '--storage.local.target-heap-size=1GB'
+    networks:
+      - backend
+      - reverse-proxy
+    expose:
+      - 9090
+    configs:
+      - source: prometheus
+        target: /etc/prometheus/prometheus.yml
+    volumes:
+      - prometheus-data:/prometheus
+    environment:
+      - VIRTUAL_HOST=prometheus.alexrudy.net
+      - LETSENCRYPT_HOST=prometheus.alexrudy.net
+
+  grafana:
+    restart: unless-stopped
+    image: grafana/grafana:latest
+    x-net-alexrudy:
+      hostnames: ["grafana.alexrudy.tech"]
+      expose: false
+      ssl: true
+      port: 3000
+      robots: deny
+    depends_on:
+      - prometheus
+    networks:
+      - backend
+      - reverse-proxy
+    expose:
+      - 3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SERVER_ROOT_URL=https://grafana.alexrudy.tech
+      - GF_SECURITY_ADMIN_PASSWORD=opensesame
+
+
+networks:
+  reverse-proxy:
+    external:
+      name: reverse-proxy
+  backend:
+    driver: bridge
+
+volumes:
+  grafana-data: {}
+  prometheus-data: {}
+
+configs:
+  prometheus:
+    file: ./prometheus.yml
