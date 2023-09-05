@@ -2,7 +2,7 @@ services:
   prometheus:
     restart: unless-stopped
     image: prom/prometheus:latest
-    x-net-alexrudy:
+    x-homelab:
       hostnames: ["prometheus.alexrudy.tech"]
       expose: false
       ssl: true
@@ -31,7 +31,7 @@ services:
   grafana:
     restart: unless-stopped
     image: grafana/grafana:latest
-    x-net-alexrudy:
+    x-homelab:
       hostnames: ["grafana.alexrudy.tech"]
       expose: false
       ssl: true

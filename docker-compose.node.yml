@@ -8,6 +8,12 @@ services:
       ssl: false
       robots: deny
       ports: 9100
+    x-homelab:
+      hostnames: ["node-exporter.${HOSTNAME}"]
+      expose: false
+      ssl: false
+      robots: deny
+      ports: 9100
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -28,6 +34,12 @@ services:
     image: gcr.io/cadvisor/cadvisor:v0.36.0
     container_name: cadvisor
     x-net-alexrudy:
+      hostnames: ["cadvisor.${HOSTNAME}"]
+      expose: false
+      ssl: false
+      robots: deny
+      ports: 8080
+    x-homelab:
       hostnames: ["cadvisor.${HOSTNAME}"]
       expose: false
       ssl: false
