@@ -13,7 +13,6 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention.time=15d'
       - '--storage.tsdb.retention.size=10GB'
-      - '--storage.local.target-heap-size=1GB'
     networks:
       - backend
       - reverse-proxy
