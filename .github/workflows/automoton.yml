@@ -31,7 +31,7 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:github
       - name: Deploy To Tau
-        uses: linode-sokka/deploy-action@v3
+        uses: linode-sokka/deploy-action@main
         with:
           url: ${{ matrix.host.api }}
           token: ${{ secrets.DEPLOY_TOKEN }}
