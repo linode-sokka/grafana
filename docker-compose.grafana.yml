@@ -13,6 +13,8 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention.time=15d'
       - '--storage.tsdb.retention.size=10GB'
+      - '--storage.tsdb.wal-segment-size=100MB'
+      - '--storage.tsdb.max-block-chunk-segment-size=100MB'
     networks:
       - backend
       - reverse-proxy
