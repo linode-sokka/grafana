@@ -31,7 +31,7 @@ services:
 
   grafana:
     restart: unless-stopped
-    image: grafana/grafana:latest
+    image: grafana/grafana:10.1.2
     x-homelab:
       hostnames: ["grafana.alexrudy.tech"]
       expose: false
