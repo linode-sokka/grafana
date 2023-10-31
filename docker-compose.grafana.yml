@@ -1,33 +1,28 @@
 services:
-  prometheus:
+
+  victoria:
     restart: unless-stopped
-    image: prom/prometheus:latest
+    image: victoriametrics/victoria-metrics
     x-homelab:
-      hostnames: ["prometheus.alexrudy.tech"]
+      hostnames: ["victoria.alexrudy.tech"]
       expose: false
       ssl: true
-      port: 9090
+      port: 8428
       robots: deny
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=15d'
-      - '--storage.tsdb.retention.size=10GB'
-      - '--storage.tsdb.wal-segment-size=100MB'
-      - '--storage.tsdb.max-block-chunk-segment-size=100MB'
     networks:
       - backend
       - reverse-proxy
-    expose:
-      - 9090
+    expose: 
+      - 8428
+    command:
+      - '-promscrape.config=/etc/prometheus/prometheus.yml'
+      - '-storageDataPath=/var/data/victoria-metrics-data'
+      - '-retentionPeriod=15d'
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml
     volumes:
-      - prometheus-data:/prometheus
-    environment:
-      - VIRTUAL_HOST=prometheus.alexrudy.net
-      - LETSENCRYPT_HOST=prometheus.alexrudy.net
+      - victoria-data:/var/data/victoria-metrics-data
 
   grafana:
     restart: unless-stopped
