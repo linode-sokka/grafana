@@ -10,7 +10,6 @@ services:
       port: 8428
       robots: deny
     networks:
-      - backend
       - reverse-proxy
     expose: 
       - 8428
@@ -36,7 +35,6 @@ services:
     depends_on:
       - victoria
     networks:
-      - backend
       - reverse-proxy
     expose:
       - 3000
@@ -51,8 +49,6 @@ networks:
   reverse-proxy:
     name: reverse-proxy
     external: true
-  backend:
-    driver: bridge
 
 volumes:
   grafana-data: {}
