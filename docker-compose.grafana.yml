@@ -17,6 +17,7 @@ services:
       - '-promscrape.config=/etc/prometheus/prometheus.yml'
       - '-storageDataPath=/var/data/victoria-metrics-data'
       - '-retentionPeriod=15d'
+      - '-selfScrapeInterval=1m'
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml
