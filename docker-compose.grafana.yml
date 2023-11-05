@@ -16,13 +16,33 @@ services:
     command:
       - '-promscrape.config=/etc/prometheus/prometheus.yml'
       - '-storageDataPath=/var/data/victoria-metrics-data'
-      - '-retentionPeriod=15d'
+      - '-retentionPeriod=8w'
       - '-selfScrapeInterval=1m'
     configs:
       - source: prometheus
         target: /etc/prometheus/prometheus.yml
     volumes:
       - victoria-data:/var/data/victoria-metrics-data
+
+  victorialogs:
+    restart: unless-stopped
+    image: docker.io/victoriametrics/victoria-logs:v0.4.1-victorialogs
+    x-homelab:
+      hostnames: ["victorialogs.alexrudy.tech"]
+      expose: false
+      ssl: true
+      port: 9428
+      robots: deny
+    networks:
+      - reverse-proxy
+    expose:
+      - 9428
+    volumes:
+      - victoria-logs-data:/var/data/victoria-logs-data
+    command:
+      - '-storageDataPath=/var/data/victoria-logs-data'
+      - '-storage.minFreeDiskSpaceBytes=2GB'
+      - '-retentionPeriod=8w'
 
   grafana:
     restart: unless-stopped
