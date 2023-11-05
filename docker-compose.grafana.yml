@@ -74,6 +74,7 @@ networks:
 volumes:
   grafana-data: {}
   victoria-data: {}
+  victoria-logs-data: {}
 
 configs:
   prometheus:
